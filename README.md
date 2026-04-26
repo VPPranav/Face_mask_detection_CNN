@@ -2,7 +2,7 @@
 
 > A deep learning binary image classifier that detects whether a person is wearing a face mask or not, built from scratch using a custom Convolutional Neural Network (CNN) with TensorFlow/Keras — now deployable as a stunning interactive web app via **Streamlit**.
 
-## 📈 Final Summary Dashboard
+## 📈 MaskSense AI Dashboard
 
 ![MaskSense Dashboard](plots/masksense_dashboard.png)
 
