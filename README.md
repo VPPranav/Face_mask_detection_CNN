@@ -1,6 +1,6 @@
-# 🎭 Face Mask Detection using CNN
+# 🎭 MaskSense AI - Face Mask Detection using CNN
 
-> A deep learning binary image classifier that detects whether a person is wearing a face mask or not, built from scratch using a custom Convolutional Neural Network (CNN) with TensorFlow/Keras.
+> A deep learning binary image classifier that detects whether a person is wearing a face mask or not, built from scratch using a custom Convolutional Neural Network (CNN) with TensorFlow/Keras — now deployable as a stunning interactive web app via **Streamlit**.
 
 ---
 
@@ -18,6 +18,7 @@
 - [Visualizations](#visualizations)
 - [Tech Stack](#tech-stack)
 - [Installation & Setup](#installation--setup)
+- [🚀 Streamlit Web App Deployment](#-streamlit-web-app-deployment)
 - [Usage](#usage)
 - [Results Summary](#results-summary)
 
@@ -78,6 +79,8 @@ Best Model Saved → best_mask_model.keras
 Evaluation: Accuracy / Precision / Recall / F1 / AUC-ROC / Confusion Matrix
       ↓
 ✅ Test Accuracy: 96.82% | AUC-ROC: 0.9965
+      ↓
+🌐 Streamlit Web App (app.py) — Interactive Deployment
 ```
 
 ---
@@ -244,22 +247,6 @@ Three callbacks were configured to automate training control:
 | Epoch 11–20 | 0.000200 |
 | Epoch 21–25 | 0.000040 |
 
-### Training Progress (Key Epochs)
-
-| Epoch | Train Accuracy | Val Accuracy | Val Loss |
-|---|---|---|---|
-| 1 | 77.39% | 50.80% | 1.1167 |
-| 4 | 85.54% | 89.20% | 0.3113 |
-| 8 | 89.70% | 94.60% | 0.1728 |
-| 12 | 93.10% | 96.55% | 0.1001 |
-| 15 | 94.33% | 97.26% | 0.0870 |
-| 22 | 95.84% | 97.43% | 0.0775 |
-| **24** ⭐ | **95.94%** | **97.52%** | **0.0749** |
-
-> ⭐ **Best model checkpoint saved at Epoch 24** — highest validation accuracy of 97.52%
-
-Training was terminated early at Epoch 24 (before the 25-epoch max) as validation loss stopped improving, with EarlyStopping restoring the best weights from Epoch 24.
-
 ---
 
 ## 📊 Evaluation & Metrics
@@ -358,51 +345,153 @@ The notebook generates the following visualizations:
 | **Pillow** (`PIL`) | Latest | Displaying sample dataset images |
 | **KaggleHub** | Latest | Automated dataset download |
 | **SciPy** | Latest | Smoothing loss curves (`uniform_filter1d`) |
+| **Streamlit** | ≥1.35.0 | Interactive web app deployment |
 
 ---
 
-## 🚀 Installation & Setup
+## 🚀 Streamlit Web App Deployment
 
-### 1. Clone or Download the Notebook
+The trained model is packaged into a professional, interactive Streamlit web application (`app.py`) with a dark-themed, production-grade UI.
 
-```bash
-git clone <your-repo-url>
-cd face-mask-detection
+### 🌐 App Features
+
+| Feature | Description |
+|---|---|
+| **🔬 Detection Page** | Upload a face image and get instant mask/no-mask prediction with confidence score |
+| **📊 About the Project** | Full project description — dataset, pipeline, preprocessing, insights |
+| **🧠 Model Architecture** | Layer-by-layer visual breakdown of the CNN with parameter counts |
+| **📈 Performance** | Interactive confusion matrix, per-class metrics, and learning rate schedule |
+| **⚙️ Decision Threshold Slider** | Adjust the classification threshold (0.3–0.9) for safety-critical deployments |
+| **📊 Dual Probability Bars** | Visual output showing confidence for both classes simultaneously |
+
+### 📁 Project Files for Deployment
+
+```
+face-mask-detection/
+├── app.py                      ← Streamlit application
+├── best_mask_model.keras       ← Trained CNN model (~25 MB)
+├── project_face_mask_detection_CNN_notebook.ipynb ← Training notebook
+├── requirements.txt            ← Python dependencies
+└── README.md                   ← This file
 ```
 
-### 2. Install Dependencies
+### ⚡ Quick Start — Run Locally
+
+#### 1. Clone / Download the Project
 
 ```bash
-pip install tensorflow==2.19.0 keras==3.13.2 numpy opencv-python scikit-learn matplotlib seaborn pillow kagglehub scipy
+git clone https://github.com/VPPranav/Face_mask_detection_CNN.git
+cd Face_mask_detection_CNN
 ```
 
-Or install from a requirements file:
+#### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure Kaggle API (for Dataset Download)
+> **Note:** Use `opencv-python-headless` (not `opencv-python`) for server/headless deployments to avoid GUI dependencies.
 
-To use `kagglehub` for automatic dataset download, you need a Kaggle API key:
+#### 3. Ensure Model File is Present
 
-1. Go to [kaggle.com](https://www.kaggle.com) → Account → API → **Create New Token**
-2. This downloads a `kaggle.json` file
-3. Place it at `~/.kaggle/kaggle.json` (Linux/macOS) or `C:\Users\<user>\.kaggle\kaggle.json` (Windows)
+Make sure `best_mask_model.keras` is in the **same directory** as `app.py`:
 
-### 4. Run the Notebook
-
-```bash
-jupyter notebook project_face_mask_detection_CNN_notebook.ipynb
+```
+face-mask-detection/
+├── app.py
+├── best_mask_model.keras   ← Required
+└── requirements.txt
 ```
 
-> 💡 **Recommended:** Run on [Kaggle Notebooks](https://www.kaggle.com/code) or Google Colab for free GPU acceleration.
+#### 4. Launch the App
+
+```bash
+streamlit run app.py
+```
+
+The app will open in your browser at `http://localhost:8501`.
+
+---
+
+### ☁️ Deploy to Streamlit Community Cloud (Free)
+
+1. Push your project to a **public GitHub repository** containing:
+   - `app.py`
+   - `best_mask_model.keras`
+   - `requirements.txt`
+
+2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+
+3. Click **"New app"**, select your repository, branch, and set the main file to `app.py`.
+
+4. Click **"Deploy"** — your app will be live at a public URL within minutes.
+
+> 💡 **Tip:** Streamlit Community Cloud provides 1 GB RAM by default. The model (~25 MB) loads well within this limit.
+
+---
+
+### 🐳 Deploy with Docker (Optional)
+
+```dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+COPY best_mask_model.keras .
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+```
+
+Build and run:
+
+```bash
+docker build -t masksense-ai .
+docker run -p 8501:8501 masksense-ai
+```
+
+---
+
+### 🔧 Inference Logic (Inside the App)
+
+The app replicates the exact preprocessing pipeline used during training:
+
+```python
+import cv2
+import numpy as np
+from PIL import Image
+import tensorflow as tf
+
+# Load model (cached by Streamlit)
+model = tf.keras.models.load_model("best_mask_model.keras")
+
+# Preprocess uploaded image
+def preprocess_image(image: Image.Image):
+    img = np.array(image.convert("RGB"))   # PIL → NumPy, ensure RGB
+    img = cv2.resize(img, (128, 128))       # Resize to model input size
+    img = img / 255.0                       # Normalize to [0, 1]
+    return np.expand_dims(img, axis=0)      # Add batch dim → (1, 128, 128, 3)
+
+# Predict
+img_array = preprocess_image(uploaded_image)
+raw_prob = float(model.predict(img_array)[0][0])   # Sigmoid output
+
+# Apply threshold (default 0.5, adjustable via UI slider)
+threshold = 0.5
+label = "With Mask" if raw_prob > threshold else "Without Mask"
+confidence = raw_prob if raw_prob > threshold else 1 - raw_prob
+```
 
 ---
 
 ## 💻 Usage
 
-### Running Inference on a New Image
+### Running Inference on a New Image (Script)
 
 After training, load the saved model and run a prediction:
 
@@ -439,7 +528,7 @@ The model uses a sigmoid output. The default decision threshold is `0.5`:
 | > 0.5 | With Mask (1) |
 | ≤ 0.5 | Without Mask (0) |
 
-> **Tip:** For safety-critical deployments, you can raise the threshold (e.g., `0.7`) to reduce false negatives (undetected unmasked faces).
+> **Tip:** For safety-critical deployments, you can raise the threshold (e.g., `0.7`) via the sidebar slider in the Streamlit app to reduce false negatives (undetected unmasked faces).
 
 ---
 
@@ -460,6 +549,8 @@ The model uses a sigmoid output. The default decision threshold is `0.5`:
 | File | Description |
 |---|---|
 | `best_mask_model.keras` | Best model checkpoint saved by `ModelCheckpoint` (monitored on `val_accuracy`) |
+| `app.py` | Streamlit web application for interactive deployment |
+| `requirements.txt` | Python dependencies for the Streamlit app |
 
 ---
 
@@ -489,6 +580,12 @@ The model uses a sigmoid output. The default decision threshold is `0.5`:
 │  False Positives : 23                │
 │  False Negatives : 13                │
 │  Total Errors    : 36 / 1,133        │
+├──────────────────────────────────────┤
+│  STREAMLIT DEPLOYMENT                │
+│  ──────────────────────────────────  │
+│  App File      : app.py              │
+│  Launch        : streamlit run app.py│
+│  Default Port  : localhost:8501      │
 └──────────────────────────────────────┘
 ```
 
@@ -496,7 +593,7 @@ The model uses a sigmoid output. The default decision threshold is `0.5`:
 
 ## 📄 License
 
-Built by Pranav V P as an academic project.
+Developed by **Pranav V P** as an Internship Project.
 
 This project is for educational and academic purposes. The dataset is sourced from Kaggle under its respective terms of use.
 
